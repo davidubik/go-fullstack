@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
+const things = require('./models/things');
 
 mongoose.connect('mongodb+srv://David:Bladerunner2049@cluster0.5ekqj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority;',
   { useNewUrlParser: true,
@@ -23,12 +24,15 @@ app.use((req, res, next) => {
 
   app.use(bodyParser.json());
 
-  app.post('/api/stuff',(req,res, next) =>{
-    console.log(req.body);
-    res.status(201).json({
-      message : 'Objet Créé !!'
+  app.post('/api/stuff', (req, res, next) => {
+    delete req.body._id;
+    const thing = new Thing({
+      ...req.body
     });
-  })
+    thing.save()
+      .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
+      .catch(error => res.status(400).json({ error }));
+  });
 
 app.use('/api/stuff', (req, res, next) => {
     const stuff = [
