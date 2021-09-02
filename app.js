@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
-const things = require('./models/things');
+const things = require('./models/thing');
 
 mongoose.connect('mongodb+srv://David:Bladerunner2049@cluster0.5ekqj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority;',
   { useNewUrlParser: true,
@@ -24,6 +24,7 @@ app.use((req, res, next) => {
 
   app.use(bodyParser.json());
 
+  //ROOT POST
   app.post('/api/stuff', (req, res, next) => {
     delete req.body._id;
     const thing = new Thing({
